@@ -1,52 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modern Analog Clock</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
 
-    <main class="clock-stage">
-      <div class="clock-bezel">
-        <div class="clock" id="clock">
-          <div class="ticks-container" id="ticks"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="A luxury analog timepiece with customizable bespoke editions (Aura Cyber, Rose Gold, and Stealth) and authentic Day & Date complications." />
+  <title>AURA | Modern Luxury Analog Clock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-          <div class="numbers">
-            <span style="--i:1"><b>1</b></span>
-            <span style="--i:2"><b>2</b></span>
-            <span style="--i:3"><b>3</b></span>
-            <span style="--i:4"><b>4</b></span>
-            <span style="--i:5"><b>5</b></span>
-            <span style="--i:6"><b>6</b></span>
-            <span style="--i:7"><b>7</b></span>
-            <span style="--i:8"><b>8</b></span>
-            <span style="--i:9"><b>9</b></span>
-            <span style="--i:10"><b>10</b></span>
-            <span style="--i:11"><b>11</b></span>
-            <span style="--i:12"><b>12</b></span>
-          </div>
+<body data-theme="cyber">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
 
-          <div class="brand">
-            <span class="brand-name">AURA</span>
-            <span class="brand-sub">AUTOMATIC</span>
-          </div>
+  <main class="clock-stage">
+    <div class="clock-bezel">
+      <div class="clock" id="clock">
+        <div class="ticks-container" id="ticks"></div>
 
-          <div id="hour" class="hand hour-hand"></div>
-          <div id="min" class="hand min-hand"></div>
-          <div id="sec" class="hand sec-hand"></div>
-
-          <div class="center-cap"></div>
+        <div class="numbers">
+          <span style="--i:1"><b>1</b></span>
+          <span style="--i:2"><b>2</b></span>
+          <span style="--i:3"><b>3</b></span>
+          <span style="--i:4"><b>4</b></span>
+          <span style="--i:5"><b>5</b></span>
+          <span style="--i:6"><b>6</b></span>
+          <span style="--i:7"><b>7</b></span>
+          <span style="--i:8"><b>8</b></span>
+          <span style="--i:9"><b>9</b></span>
+          <span style="--i:10"><b>10</b></span>
+          <span style="--i:11"><b>11</b></span>
+          <span style="--i:12"><b>12</b></span>
         </div>
-      </div>
-    </main>
 
-    <script src="script.js"></script>
-  </body>
+        <!-- Brand Header -->
+        <div class="brand">
+          <span class="brand-name">AURA</span>
+          <span class="brand-sub" id="brandSub">AUTOMATIC</span>
+        </div>
+
+        <!-- Date & Digital Time Complication (6 o'clock Sub-Aperture) -->
+        <div class="date-time-complication" id="dateTimeComplication" aria-label="Current Date and Digital Time">
+          <div class="complication-deck">
+            <div class="deck-row date-row">
+              <span class="comp-day" id="compDay">WED</span>
+              <span class="comp-dot">•</span>
+              <span class="comp-date" id="compDate">06</span>
+              <span class="comp-month" id="compMonth">OCT</span>
+            </div>
+            <div class="deck-row time-row">
+              <span class="comp-time" id="compTime">07:53:20</span>
+              <span class="comp-ampm" id="compAmPm">PM</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hands -->
+        <div id="hour" class="hand hour-hand"></div>
+        <div id="min" class="hand min-hand"></div>
+        <div id="sec" class="hand sec-hand"></div>
+
+        <!-- Center Cap -->
+        <div class="center-cap"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Theme Switcher Floating Dock -->
+  <nav class="theme-dock" aria-label="Clock Theme Switcher">
+    <div class="theme-dock-inner">
+      <div class="theme-options" role="radiogroup" aria-label="Watch Themes">
+        <button class="theme-btn active" data-theme="cyber" role="radio" aria-checked="true"
+          aria-label="Aura Cyber Edition">
+          <span class="swatch swatch-cyber"></span>
+          <span class="theme-name">Cyber</span>
+        </button>
+        <button class="theme-btn" data-theme="rosegold" role="radio" aria-checked="false"
+          aria-label="Rose Gold Edition">
+          <span class="swatch swatch-rosegold"></span>
+          <span class="theme-name">Rose Gold</span>
+        </button>
+        <button class="theme-btn" data-theme="stealth" role="radio" aria-checked="false" aria-label="Stealth Edition">
+          <span class="swatch swatch-stealth"></span>
+          <span class="theme-name">Stealth</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <script src="script.js"></script>
+</body>
+
 </html>

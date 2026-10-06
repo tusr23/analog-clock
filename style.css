@@ -1,9 +1,204 @@
-:root {
+/* ==========================================================================
+   THEME DESIGN SYSTEM
+   ========================================================================== */
+
+:root,
+body[data-theme="cyber"] {
   --size: clamp(280px, 80vw, 400px);
-  --accent: #38bdf8;
-  --accent-glow: 0 0 16px rgba(56, 189, 248, 0.6);
-  --sec: #60a5fa;
+
+  /* Background & Ambiance */
+  --bg-gradient: radial-gradient(circle at 50% 30%, #0e2238 0%, #07111e 60%, #03080f 100%);
+  --glow-1-bg: #38bdf8;
+  --glow-2-bg: #6366f1;
+  --glow-1-opacity: 0.35;
+  --glow-2-opacity: 0.28;
+
+  /* Bezel & Casing */
+  --bezel-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(56, 189, 248, 0.04));
+  --bezel-border: rgba(56, 189, 248, 0.25);
+  --bezel-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+
+  /* Dial */
+  --dial-bg: radial-gradient(circle at center, #0c1e33 0%, #071322 70%, #030912 100%);
+  --dial-border: rgba(56, 189, 248, 0.15);
+  --dial-ring-border: rgba(255, 255, 255, 0.06);
+
+  /* Ticks & Markers */
+  --tick-minor: rgba(255, 255, 255, 0.2);
+  --tick-major: #38bdf8;
+  --tick-major-glow: 0 0 16px rgba(56, 189, 248, 0.6);
+
+  /* Numerals */
+  --num-default: rgba(240, 249, 255, 0.85);
+  --num-cardinal: #ffffff;
+  --num-glow: 0 0 14px rgba(56, 189, 248, 0.4);
+
+  /* Brand */
+  --brand-name-grad: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+  --brand-sub: #38bdf8;
+
+  /* Hands */
+  --hour-hand-bg: #f0f9ff;
+  --hour-hand-inlay: #38bdf8;
+  --min-hand-bg: #38bdf8;
+  --min-hand-inlay: #ffffff;
+  --min-hand-glow: 0 0 12px rgba(56, 189, 248, 0.4);
+  --sec-hand-color: #60a5fa;
+  --sec-hand-glow: 0 0 14px rgba(96, 165, 250, 0.95);
+  --sec-counter-bg: #071322;
+
+  /* Center Cap */
+  --cap-bg: radial-gradient(circle at 35% 35%, #475569 0%, #0f172a 100%);
+  --cap-border: rgba(255, 255, 255, 0.4);
+  --cap-dot: #60a5fa;
+
+  /* Date Complication */
+  --comp-frame-bg: linear-gradient(180deg, #091a2d 0%, #050d18 100%);
+  --comp-frame-border: rgba(56, 189, 248, 0.35);
+  --comp-frame-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(56, 189, 248, 0.2);
+  --comp-day-color: #38bdf8;
+  --comp-date-color: #f0f9ff;
+  --comp-divider: rgba(56, 189, 248, 0.25);
+
+  /* Theme Dock */
+  --dock-bg: rgba(12, 30, 51, 0.7);
+  --dock-border: rgba(56, 189, 248, 0.2);
+  --dock-active-bg: rgba(56, 189, 248, 0.15);
+  --dock-active-border: #38bdf8;
+  --dock-active-glow: 0 0 12px rgba(56, 189, 248, 0.35);
 }
+
+/* Theme 2: Rose Gold & Royal Emerald */
+body[data-theme="rosegold"] {
+  /* Background & Ambiance */
+  --bg-gradient: radial-gradient(circle at 50% 30%, #171d18 0%, #0c140e 60%, #040705 100%);
+  --glow-1-bg: #d97706;
+  --glow-2-bg: #059669;
+  --glow-1-opacity: 0.26;
+  --glow-2-opacity: 0.22;
+
+  /* Bezel & Casing - Polished 18K Rose Gold */
+  --bezel-bg: linear-gradient(145deg, rgba(251, 191, 36, 0.18), rgba(217, 119, 6, 0.08));
+  --bezel-border: rgba(245, 158, 11, 0.45);
+  --bezel-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.95), 0 0 45px rgba(245, 158, 11, 0.18), inset 0 1px 3px rgba(254, 243, 199, 0.4);
+
+  /* Dial - Royal Emerald Sunburst */
+  --dial-bg: radial-gradient(circle at center, #093826 0%, #052317 65%, #01110a 100%);
+  --dial-border: rgba(245, 158, 11, 0.28);
+  --dial-ring-border: rgba(245, 158, 11, 0.12);
+
+  /* Ticks & Markers */
+  --tick-minor: rgba(251, 191, 36, 0.25);
+  --tick-major: #fbbf24;
+  --tick-major-glow: 0 0 14px rgba(251, 191, 36, 0.65);
+
+  /* Numerals */
+  --num-default: rgba(254, 243, 199, 0.85);
+  --num-cardinal: #fef08a;
+  --num-glow: 0 0 14px rgba(245, 158, 11, 0.45);
+
+  /* Brand */
+  --brand-name-grad: linear-gradient(180deg, #fef08a 0%, #d97706 100%);
+  --brand-sub: #fbbf24;
+
+  /* Hands - Rose Gold Inlay */
+  --hour-hand-bg: #fef3c7;
+  --hour-hand-inlay: #b45309;
+  --min-hand-bg: #fbbf24;
+  --min-hand-inlay: #78350f;
+  --min-hand-glow: 0 0 12px rgba(251, 191, 36, 0.4);
+  --sec-hand-color: #ef4444;
+  --sec-hand-glow: 0 0 14px rgba(239, 68, 68, 0.85);
+  --sec-counter-bg: #052317;
+
+  /* Center Cap */
+  --cap-bg: radial-gradient(circle at 35% 35%, #d97706 0%, #451a03 100%);
+  --cap-border: rgba(254, 243, 199, 0.6);
+  --cap-dot: #ef4444;
+
+  /* Date Complication */
+  --comp-frame-bg: linear-gradient(180deg, #09281a 0%, #03140d 100%);
+  --comp-frame-border: rgba(245, 158, 11, 0.5);
+  --comp-frame-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(245, 158, 11, 0.25);
+  --comp-day-color: #fbbf24;
+  --comp-date-color: #fef3c7;
+  --comp-divider: rgba(245, 158, 11, 0.35);
+
+  /* Theme Dock */
+  --dock-bg: rgba(14, 26, 18, 0.75);
+  --dock-border: rgba(245, 158, 11, 0.25);
+  --dock-active-bg: rgba(245, 158, 11, 0.16);
+  --dock-active-border: #f59e0b;
+  --dock-active-glow: 0 0 12px rgba(245, 158, 11, 0.35);
+}
+
+/* Theme 3: Stealth Carbon & Crimson */
+body[data-theme="stealth"] {
+  /* Background & Ambiance */
+  --bg-gradient: radial-gradient(circle at 50% 30%, #18181b 0%, #0f0f11 60%, #050506 100%);
+  --glow-1-bg: #ef4444;
+  --glow-2-bg: #f97316;
+  --glow-1-opacity: 0.22;
+  --glow-2-opacity: 0.15;
+
+  /* Bezel & Casing - Matte Titanium / DLC */
+  --bezel-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.7));
+  --bezel-border: rgba(255, 69, 58, 0.3);
+  --bezel-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.98), 0 0 35px rgba(239, 68, 68, 0.18), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+
+  /* Dial - Tactical Matte Carbon */
+  --dial-bg: radial-gradient(circle at center, #1c1c21 0%, #121216 70%, #0a0a0c 100%);
+  --dial-border: rgba(239, 68, 68, 0.2);
+  --dial-ring-border: rgba(255, 255, 255, 0.04);
+
+  /* Ticks & Markers */
+  --tick-minor: rgba(255, 255, 255, 0.18);
+  --tick-major: #ff3b30;
+  --tick-major-glow: 0 0 14px rgba(255, 59, 48, 0.7);
+
+  /* Numerals */
+  --num-default: rgba(228, 228, 231, 0.75);
+  --num-cardinal: #ffffff;
+  --num-glow: 0 0 14px rgba(255, 59, 48, 0.5);
+
+  /* Brand */
+  --brand-name-grad: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+  --brand-sub: #ff3b30;
+
+  /* Hands - Tactical High Contrast */
+  --hour-hand-bg: #f4f4f5;
+  --hour-hand-inlay: #ff3b30;
+  --min-hand-bg: #e4e4e7;
+  --min-hand-inlay: #18181b;
+  --min-hand-glow: 0 0 10px rgba(255, 255, 255, 0.2);
+  --sec-hand-color: #ff3b30;
+  --sec-hand-glow: 0 0 16px rgba(255, 59, 48, 0.95);
+  --sec-counter-bg: #121216;
+
+  /* Center Cap */
+  --cap-bg: radial-gradient(circle at 35% 35%, #27272a 0%, #09090b 100%);
+  --cap-border: rgba(255, 255, 255, 0.25);
+  --cap-dot: #ff3b30;
+
+  /* Date Complication */
+  --comp-frame-bg: linear-gradient(180deg, #18181b 0%, #0c0c0e 100%);
+  --comp-frame-border: rgba(255, 59, 48, 0.4);
+  --comp-frame-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(255, 59, 48, 0.2);
+  --comp-day-color: #ff3b30;
+  --comp-date-color: #ffffff;
+  --comp-divider: rgba(255, 59, 48, 0.35);
+
+  /* Theme Dock */
+  --dock-bg: rgba(24, 24, 27, 0.75);
+  --dock-border: rgba(255, 59, 48, 0.25);
+  --dock-active-bg: rgba(255, 59, 48, 0.18);
+  --dock-active-border: #ff3b30;
+  --dock-active-glow: 0 0 12px rgba(255, 59, 48, 0.4);
+}
+
+/* ==========================================================================
+   BASE & RESET
+   ========================================================================== */
 
 * {
   margin: 0;
@@ -15,51 +210,80 @@
 body {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at 50% 30%, #0e2238 0%, #07111e 60%, #03080f 100%);
+  background: var(--bg-gradient);
   font-family: 'Outfit', sans-serif;
   color: #fff;
   overflow: hidden;
   user-select: none;
+  transition: background 0.6s ease;
 }
 
-/* Ambient glow */
+/* Ambient glow blobs */
 .glow {
   position: fixed;
   border-radius: 50%;
   filter: blur(90px);
-  opacity: 0.35;
   pointer-events: none;
+  transition: background 0.6s ease, opacity 0.6s ease;
 }
-.glow-1 { width: 400px; height: 400px; background: #38bdf8; top: 10%; left: 20%; }
-.glow-2 { width: 340px; height: 340px; background: #6366f1; bottom: 15%; right: 20%; }
+.glow-1 {
+  width: 420px;
+  height: 420px;
+  background: var(--glow-1-bg);
+  opacity: var(--glow-1-opacity);
+  top: 10%;
+  left: 20%;
+}
+.glow-2 {
+  width: 360px;
+  height: 360px;
+  background: var(--glow-2-bg);
+  opacity: var(--glow-2-opacity);
+  bottom: 15%;
+  right: 20%;
+}
 
-/* Bezel & Clock Face */
-.clock-stage { position: relative; z-index: 1; }
+/* ==========================================================================
+   BEZEL & CLOCK FACE
+   ========================================================================== */
+
+.clock-stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
 
 .clock-bezel {
   width: calc(var(--size) + 36px);
   height: calc(var(--size) + 36px);
   border-radius: 50%;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(56, 189, 248, 0.03));
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  background: var(--bezel-bg);
+  border: 1px solid var(--bezel-border);
+  box-shadow: var(--bezel-shadow);
   backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.6s ease;
 }
 
 .clock {
   width: var(--size);
   height: var(--size);
   border-radius: 50%;
-  background: radial-gradient(circle at center, #0c1e33 0%, #071322 70%, #030912 100%);
-  border: 1px solid rgba(56, 189, 248, 0.12);
+  background: var(--dial-bg);
+  border: 1px solid var(--dial-border);
   box-shadow: inset 0 8px 24px rgba(0, 0, 0, 0.85);
   position: relative;
   overflow: hidden;
+  transition: all 0.6s ease;
 }
 
 .clock::after {
@@ -67,12 +291,18 @@ body {
   position: absolute;
   inset: 48px;
   border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.06);
+  border: 1px dashed var(--dial-ring-border);
   pointer-events: none;
+  transition: border-color 0.6s ease;
 }
 
 /* Dial Ticks & Numerals */
-.ticks-container, .numbers { position: absolute; inset: 0; pointer-events: none; }
+.ticks-container,
+.numbers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
 
 .tick {
   position: absolute;
@@ -81,16 +311,19 @@ body {
   width: 1.5px;
   height: 6px;
   margin: -3px 0 0 -0.75px;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--tick-minor);
   border-radius: 1px;
+  transition: background 0.6s ease;
 }
+
 .tick.major {
   width: 2.5px;
   height: 12px;
   margin: -6px 0 0 -1.25px;
-  background: var(--accent);
-  box-shadow: var(--accent-glow);
+  background: var(--tick-major);
+  box-shadow: var(--tick-major-glow);
   border-radius: 2px;
+  transition: background 0.6s ease, box-shadow 0.6s ease;
 }
 
 .numbers span {
@@ -105,21 +338,118 @@ body {
   align-items: center;
   transform: rotate(calc(30deg * var(--i))) translateY(calc(-0.5 * var(--size) + 42px)) rotate(calc(-30deg * var(--i)));
 }
+
 .numbers span b {
   font-size: clamp(20px, 4.8vw, 24px);
   font-weight: 600;
-  color: rgba(240, 249, 255, 0.85);
-}
-.numbers span[style*="--i: 12"] b,
-.numbers span[style*="--i: 3"] b,
-.numbers span[style*="--i: 6"] b,
-.numbers span[style*="--i: 9"] b {
-  color: #fff;
-  font-weight: 700;
-  text-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
+  color: var(--num-default);
+  transition: color 0.6s ease, text-shadow 0.6s ease;
 }
 
-/* Brand */
+.numbers span[style*="--i:12"] b,
+.numbers span[style*="--i: 12"] b,
+.numbers span[style*="--i:3"] b,
+.numbers span[style*="--i: 3"] b,
+.numbers span[style*="--i:6"] b,
+.numbers span[style*="--i: 6"] b,
+.numbers span[style*="--i:9"] b,
+.numbers span[style*="--i: 9"] b {
+  color: var(--num-cardinal);
+  font-weight: 700;
+  text-shadow: var(--num-glow);
+}
+
+/* ==========================================================================
+   DATE & DIGITAL TIME COMPLICATION (6 o'clock Sub-Aperture)
+   ========================================================================== */
+
+.date-time-complication {
+  position: absolute;
+  top: calc(50% + var(--size) * 0.18);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.complication-deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 12px;
+  background: var(--comp-frame-bg);
+  border: 1px solid var(--comp-frame-border);
+  border-radius: 8px;
+  box-shadow: var(--comp-frame-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.6s ease;
+}
+
+.deck-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+}
+
+.date-row {
+  gap: 4px;
+}
+
+.comp-day,
+.comp-month {
+  font-size: clamp(8px, 1.9vw, 9.5px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--comp-day-color);
+  text-transform: uppercase;
+  transition: color 0.6s ease;
+}
+
+.comp-dot {
+  font-size: 8px;
+  color: var(--comp-divider);
+  opacity: 0.8;
+  margin: 0 1px;
+}
+
+.comp-date {
+  font-size: clamp(8.5px, 2.1vw, 10.5px);
+  font-weight: 700;
+  color: var(--comp-date-color);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+  transition: color 0.6s ease;
+}
+
+.time-row {
+  gap: 4px;
+}
+
+.comp-time {
+  font-size: clamp(11px, 2.8vw, 13.5px);
+  font-weight: 700;
+  color: var(--comp-date-color);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  transition: color 0.6s ease;
+}
+
+.comp-ampm {
+  font-size: clamp(7.5px, 1.8vw, 9px);
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--comp-day-color);
+  transition: color 0.6s ease;
+}
+
+/* ==========================================================================
+   BRAND
+   ========================================================================== */
+
 .brand {
   position: absolute;
   top: calc(var(--size) * 0.24);
@@ -130,30 +460,49 @@ body {
   align-items: center;
   pointer-events: none;
 }
+
 .brand-name {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 5px;
   padding-left: 5px;
-  background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.6) 100%);
+  background: var(--brand-name-grad);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: all 0.6s ease;
 }
-.brand-sub { font-size: 8px; font-weight: 600; letter-spacing: 3px; color: var(--accent); }
 
-/* Hands */
-.hand { position: absolute; top: 50%; left: 50%; transform-origin: 50% 100%; }
+.brand-sub {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--brand-sub);
+  transition: color 0.6s ease;
+}
+
+/* ==========================================================================
+   HANDS
+   ========================================================================== */
+
+.hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 50% 100%;
+}
 
 .hour-hand {
   width: 7px;
   height: calc(var(--size) * 0.27);
-  background: #f0f9ff;
+  background: var(--hour-hand-bg);
   border-radius: 6px 6px 2px 2px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
   transform: translate(-50%, -100%) rotate(var(--hr, 0deg));
   z-index: 3;
+  transition: background 0.6s ease;
 }
+
 .hour-hand::after {
   content: '';
   position: absolute;
@@ -162,19 +511,22 @@ body {
   left: 50%;
   width: 2px;
   transform: translateX(-50%);
-  background: var(--accent);
+  background: var(--hour-hand-inlay);
   border-radius: 1px;
+  transition: background 0.6s ease;
 }
 
 .min-hand {
   width: 4.5px;
   height: calc(var(--size) * 0.38);
-  background: var(--accent);
+  background: var(--min-hand-bg);
   border-radius: 4px 4px 2px 2px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(56, 189, 248, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), var(--min-hand-glow);
   transform: translate(-50%, -100%) rotate(var(--min, 0deg));
   z-index: 4;
+  transition: background 0.6s ease, box-shadow 0.6s ease;
 }
+
 .min-hand::after {
   content: '';
   position: absolute;
@@ -183,20 +535,23 @@ body {
   left: 50%;
   width: 1.5px;
   transform: translateX(-50%);
-  background: #fff;
+  background: var(--min-hand-inlay);
   border-radius: 1px;
+  transition: background 0.6s ease;
 }
 
 .sec-hand {
   width: 2px;
   height: calc(var(--size) * 0.52);
-  background: var(--sec);
-  box-shadow: 0 0 12px rgba(96, 165, 250, 0.9);
+  background: var(--sec-hand-color);
+  box-shadow: var(--sec-hand-glow);
   border-radius: 2px;
   transform: translate(-50%, calc(-0.42 * var(--size))) rotate(var(--sec, 0deg));
   transform-origin: 50% calc(0.42 * var(--size));
   z-index: 5;
+  transition: background 0.6s ease, box-shadow 0.6s ease;
 }
+
 .sec-hand::before {
   content: '';
   position: absolute;
@@ -206,9 +561,11 @@ body {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--sec);
-  box-shadow: 0 0 12px rgba(96, 165, 250, 0.9);
+  background: var(--sec-hand-color);
+  box-shadow: var(--sec-hand-glow);
+  transition: background 0.6s ease, box-shadow 0.6s ease;
 }
+
 .sec-hand::after {
   content: '';
   position: absolute;
@@ -218,11 +575,15 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid var(--sec);
-  background: #071322;
+  border: 2px solid var(--sec-hand-color);
+  background: var(--sec-counter-bg);
+  transition: border-color 0.6s ease, background 0.6s ease;
 }
 
-/* Center Cap */
+/* ==========================================================================
+   CENTER CAP
+   ========================================================================== */
+
 .center-cap {
   position: absolute;
   top: 50%;
@@ -231,19 +592,138 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #475569 0%, #0f172a 100%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: var(--cap-bg);
+  border: 1px solid var(--cap-border);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
   z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background 0.6s ease, border-color 0.6s ease;
 }
+
 .center-cap::after {
   content: '';
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--sec);
-  box-shadow: 0 0 6px var(--sec);
+  background: var(--cap-dot);
+  box-shadow: 0 0 6px var(--cap-dot);
+  transition: background 0.6s ease, box-shadow 0.6s ease;
+}
+
+/* ==========================================================================
+   THEME SWITCHER DOCK
+   ========================================================================== */
+
+.theme-dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  max-width: calc(100vw - 32px);
+}
+
+.theme-dock-inner {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background: var(--dock-bg);
+  border: 1px solid var(--dock-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 9999px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  transition: all 0.6s ease;
+}
+
+.theme-options {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.theme-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-btn.active {
+  color: #fff;
+  background: var(--dock-active-bg);
+  border-color: var(--dock-active-border);
+  box-shadow: var(--dock-active-glow);
+}
+
+.swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 6px currentColor;
+  transition: transform 0.3s ease;
+}
+
+.theme-btn:hover .swatch,
+.theme-btn.active .swatch {
+  transform: scale(1.15);
+}
+
+.swatch-cyber {
+  background: #38bdf8;
+  color: #38bdf8;
+}
+
+.swatch-rosegold {
+  background: linear-gradient(135deg, #fbbf24, #d97706);
+  color: #fbbf24;
+}
+
+.swatch-stealth {
+  background: #ff3b30;
+  color: #ff3b30;
+}
+
+/* ==========================================================================
+   MOBILE & RESPONSIVE ADJUSTMENTS
+   ========================================================================== */
+
+@media (max-height: 650px) {
+  .clock-stage {
+    margin-bottom: 50px;
+  }
+  .theme-dock {
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  .theme-dock-inner {
+    padding: 4px;
+  }
+  .theme-btn {
+    padding: 5px 9px;
+    font-size: 11px;
+    gap: 5px;
+  }
 }
