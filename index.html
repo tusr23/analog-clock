@@ -14,7 +14,6 @@
   <div class="glow glow-1"></div>
   <div class="glow glow-2"></div>
 
-  <!-- Top Luxury Header -->
   <header class="app-header">
     <div class="header-main">
       <div class="header-brand">
@@ -25,7 +24,6 @@
         </div>
       </div>
 
-      <!-- Active Location of Time Display -->
       <button class="header-location-display" id="headerLocationDisplay" type="button" aria-haspopup="dialog"
         aria-label="Active Location Time. Click to switch world locations" title="Click to view &amp; change location">
         <span class="hloc-flag" id="headerLocFlag">📍</span>
@@ -48,7 +46,6 @@
     </div>
   </header>
 
-  <!-- Main Clock Stage -->
   <main class="clock-stage">
     <div class="clock-bezel">
       <div class="clock" id="clock">
@@ -69,28 +66,23 @@
           <span style="--i:12"><b>12</b></span>
         </div>
 
-        <!-- Brand Emblem (Upper Dial) -->
         <div class="brand">
           <span class="brand-name">AURA</span>
         </div>
 
-        <!-- Movement Edition (Lower Dial) -->
         <div class="brand-sub-badge">
           <span class="brand-sub" id="brandSub">AUTOMATIC</span>
         </div>
 
-        <!-- Hands -->
         <div id="hour" class="hand hour-hand"></div>
         <div id="min" class="hand min-hand"></div>
         <div id="sec" class="hand sec-hand"></div>
 
-        <!-- Center Cap -->
         <div class="center-cap"></div>
       </div>
     </div>
   </main>
 
-  <!-- Theme Switcher Floating Dock -->
   <nav class="theme-dock" aria-label="Clock Theme Switcher">
     <div class="theme-dock-inner">
       <div class="theme-options" role="radiogroup" aria-label="Watch Themes">
@@ -110,7 +102,6 @@
     </div>
   </nav>
 
-  <!-- World Time Registry Modal -->
   <div class="world-modal-backdrop" id="worldModalBackdrop" aria-hidden="true">
     <div class="world-modal" id="worldModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="world-modal-header">
@@ -124,7 +115,6 @@
         <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close World Time Registry" title="Close (Esc)">✕</button>
       </div>
 
-      <!-- Live Search & Filter Bar -->
       <div class="modal-search-wrapper">
         <div class="search-input-box">
           <span class="search-icon">🔍</span>
@@ -135,7 +125,6 @@
         </div>
       </div>
 
-      <!-- Modal Body -->
       <div class="modal-body">
         <div class="search-results-section" id="searchResultsSection" style="display: none;">
           <div class="section-label">Search Results (<span id="searchResultCount">0</span>)</div>

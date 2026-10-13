@@ -1,6 +1,3 @@
-// ==========================================================================
-// AURA HOROLOGY — HIGH-PERFORMANCE TIMEPIECE & WORLD TIME ENGINE
-// ==========================================================================
 const hr = document.getElementById('hour');
 const min = document.getElementById('min');
 const sec = document.getElementById('sec');
@@ -33,7 +30,6 @@ const THEME_STORAGE_KEY = 'aura_watch_theme';
 const LOCATION_STORAGE_KEY = 'aura_active_location';
 const PINNED_STORAGE_KEY = 'aura_pinned_locations';
 
-// 50+ Global Cities & Timezones Database
 const WORLD_CITIES = [
   { id: 'local', name: 'Local Device Time', shortName: 'Local', country: 'Current Location', tz: null, flag: '📍' },
   { id: 'ny', name: 'New York', shortName: 'New York', country: 'United States', tz: 'America/New_York', flag: '🇺🇸' },
@@ -91,7 +87,6 @@ const WORLD_CITIES = [
   { id: 'reykjavik', name: 'Reykjavik', shortName: 'Reykjavik', country: 'Iceland', tz: 'Atlantic/Reykjavik', flag: '🇮🇸' }
 ];
 
-// O(1) City Map & Search Index
 const CITY_MAP = new Map();
 WORLD_CITIES.forEach(c => {
   CITY_MAP.set(c.id, c);
@@ -103,7 +98,6 @@ let activeLocationId = 'local';
 let pinnedLocationIds = [...DEFAULT_PINNED_IDS];
 let isModalOpen = false;
 
-// State Persistence
 try {
   const savedActive = localStorage.getItem(LOCATION_STORAGE_KEY);
   if (savedActive && CITY_MAP.has(savedActive)) activeLocationId = savedActive;
@@ -127,7 +121,6 @@ const getCityById = id => CITY_MAP.get(id) || WORLD_CITIES[0];
 let activeCity = getCityById(activeLocationId);
 let activeCityOffsetMs = 0;
 
-// Dial Ticks Generation (Single Atomic Append)
 if (ticks) {
   const frag = document.createDocumentFragment();
   for (let i = 0; i < 60; i++) {
@@ -140,7 +133,6 @@ if (ticks) {
   ticks.appendChild(frag);
 }
 
-// Timezone Calculations & Offset Cache
 const offsetCache = new Map();
 let lastCacheRefresh = 0;
 
@@ -216,7 +208,6 @@ function formatDigitalTime(d, includeSeconds = true) {
   return { time: `${hStr}:${mStr}:${s < 10 ? '0' + s : s}`, ampm };
 }
 
-// Hand Interpolation Engine
 let isTransitioning = false;
 let transitionStartTime = 0;
 const TRANSITION_DURATION = 550;
@@ -262,7 +253,6 @@ function switchLocation(newLocationId, animate = true) {
 
 activeCityOffsetMs = getCityOffsetFromLocalMs(activeCity.tz);
 
-// Header Location Display
 function updateHeaderLocationDisplay(city, now = new Date()) {
   if (!headerLocName) return;
   headerLocName.textContent = city.id === 'local' ? 'LOCAL TIME' : city.shortName.toUpperCase();
@@ -290,7 +280,6 @@ function updateHeaderLiveTime() {
 
 if (headerLocationDisplay) headerLocationDisplay.addEventListener('click', openWorldModal);
 
-// Modal Cards & Event Delegation
 function renderPinnedCards() {
   if (!pinnedGrid) return;
   const frag = document.createDocumentFragment();
@@ -346,7 +335,6 @@ function createCityCard(city, now = new Date(), isPinned = false) {
   return card;
 }
 
-// Single Event Delegation Listener for All Cards & Actions
 if (worldModal) {
   worldModal.addEventListener('click', e => {
     const removeBtn = e.target.closest('.card-remove-btn');
@@ -422,7 +410,6 @@ function unpinCity(cityId) {
   renderPinnedCards();
 }
 
-// Search & Filter (Pre-indexed & Debounced)
 let searchDebounce = null;
 function handleSearch(query) {
   const clean = query.trim().toLowerCase();
@@ -492,7 +479,6 @@ window.addEventListener('keydown', e => {
   if (e.key === 'Escape' && isModalOpen) closeWorldModal();
 });
 
-// Theme Switcher
 function setTheme(name) {
   if (!THEME_SUBTITLES[name]) name = 'cyber';
   document.body.setAttribute('data-theme', name);
@@ -516,12 +502,10 @@ try {
 } catch (e) {}
 setTheme(initialTheme);
 
-// Initialize UI
 updateHeaderLocationDisplay(activeCity);
 if (pinnedBadge) pinnedBadge.textContent = pinnedLocationIds.length;
 renderPinnedCards();
 
-// 60FPS Animation Loop (Zero-GC Hot Path)
 let lastLiveSecondTick = 0;
 
 function updateClock(timestamp) {
