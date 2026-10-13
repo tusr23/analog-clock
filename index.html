@@ -1,22 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="A luxury analog timepiece with customizable bespoke editions (Aura Cyber, Rose Gold, and Stealth) and authentic Day & Date complications." />
-  <title>AURA | Modern Luxury Analog Clock</title>
+  <meta name="description" content="A bespoke luxury analog horology timepiece and international world time chronometer." />
+  <title>AURA | Modern Luxury Analog Clock & World Time</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body data-theme="cyber">
   <div class="glow glow-1"></div>
   <div class="glow glow-2"></div>
 
+  <!-- Top Luxury Header -->
+  <header class="app-header">
+    <div class="header-main">
+      <div class="header-brand">
+        <span class="header-glyph">◈</span>
+        <div class="header-text-group">
+          <h1 class="header-title">AURA</h1>
+          <span class="header-subtitle">WORLD TIME &amp; DUAL CHRONOMETER</span>
+        </div>
+      </div>
+
+      <!-- Active Location of Time Display -->
+      <button class="header-location-display" id="headerLocationDisplay" type="button" aria-haspopup="dialog"
+        aria-label="Active Location Time. Click to switch world locations" title="Click to view &amp; change location">
+        <span class="hloc-flag" id="headerLocFlag">📍</span>
+        <span class="hloc-name" id="headerLocName">LOCAL TIME</span>
+        <span class="hloc-sep">•</span>
+        <span class="hloc-time" id="headerLocTime">12:00:00 PM</span>
+        <span class="hloc-offset" id="headerLocOffset">UTC+0</span>
+        <span class="hloc-daynight" id="headerLocDayNight" title="Day/Night indicator">☀️</span>
+        <span class="hloc-arrow">▾</span>
+      </button>
+
+      <div class="header-actions">
+        <button class="world-modal-trigger" id="worldModalTrigger" type="button" aria-haspopup="dialog"
+          aria-label="Open World Time Registry" title="View all world clocks &amp; add cities">
+          <span class="trigger-icon">🌐</span>
+          <span class="trigger-text">World Clocks</span>
+          <span class="trigger-badge" id="pinnedBadge">6</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Clock Stage -->
   <main class="clock-stage">
     <div class="clock-bezel">
       <div class="clock" id="clock">
@@ -37,26 +69,14 @@
           <span style="--i:12"><b>12</b></span>
         </div>
 
-        <!-- Brand Header -->
+        <!-- Brand Emblem (Upper Dial) -->
         <div class="brand">
           <span class="brand-name">AURA</span>
-          <span class="brand-sub" id="brandSub">AUTOMATIC</span>
         </div>
 
-        <!-- Date & Digital Time Complication (6 o'clock Sub-Aperture) -->
-        <div class="date-time-complication" id="dateTimeComplication" aria-label="Current Date and Digital Time">
-          <div class="complication-deck">
-            <div class="deck-row date-row">
-              <span class="comp-day" id="compDay">WED</span>
-              <span class="comp-dot">•</span>
-              <span class="comp-date" id="compDate">06</span>
-              <span class="comp-month" id="compMonth">OCT</span>
-            </div>
-            <div class="deck-row time-row">
-              <span class="comp-time" id="compTime">07:53:20</span>
-              <span class="comp-ampm" id="compAmPm">PM</span>
-            </div>
-          </div>
+        <!-- Movement Edition (Lower Dial) -->
+        <div class="brand-sub-badge">
+          <span class="brand-sub" id="brandSub">AUTOMATIC</span>
         </div>
 
         <!-- Hands -->
@@ -74,13 +94,11 @@
   <nav class="theme-dock" aria-label="Clock Theme Switcher">
     <div class="theme-dock-inner">
       <div class="theme-options" role="radiogroup" aria-label="Watch Themes">
-        <button class="theme-btn active" data-theme="cyber" role="radio" aria-checked="true"
-          aria-label="Aura Cyber Edition">
+        <button class="theme-btn active" data-theme="cyber" role="radio" aria-checked="true" aria-label="Cyber Edition">
           <span class="swatch swatch-cyber"></span>
           <span class="theme-name">Cyber</span>
         </button>
-        <button class="theme-btn" data-theme="rosegold" role="radio" aria-checked="false"
-          aria-label="Rose Gold Edition">
+        <button class="theme-btn" data-theme="rosegold" role="radio" aria-checked="false" aria-label="Rose Gold Edition">
           <span class="swatch swatch-rosegold"></span>
           <span class="theme-name">Rose Gold</span>
         </button>
@@ -92,7 +110,49 @@
     </div>
   </nav>
 
-  <script src="script.js"></script>
-</body>
+  <!-- World Time Registry Modal -->
+  <div class="world-modal-backdrop" id="worldModalBackdrop" aria-hidden="true">
+    <div class="world-modal" id="worldModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="world-modal-header">
+        <div class="modal-title-group">
+          <div class="modal-title-icon">🌐</div>
+          <div>
+            <h2 class="modal-title" id="modalTitle">World Time Registry</h2>
+            <p class="modal-sub">Synchronize the primary analog dial or track multiple locations simultaneously.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close World Time Registry" title="Close (Esc)">✕</button>
+      </div>
 
+      <!-- Live Search & Filter Bar -->
+      <div class="modal-search-wrapper">
+        <div class="search-input-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="citySearchInput" class="city-search-input"
+            placeholder="Search 50+ global cities, countries, or timezones (e.g. Tokyo, London, Paris, New York)..."
+            autocomplete="off" spellcheck="false" />
+          <button class="search-clear-btn" id="searchClearBtn" aria-label="Clear Search" type="button" style="display: none;">✕</button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="search-results-section" id="searchResultsSection" style="display: none;">
+          <div class="section-label">Search Results (<span id="searchResultCount">0</span>)</div>
+          <div class="search-results-grid" id="searchResultsGrid"></div>
+        </div>
+
+        <div class="pinned-section" id="pinnedSection">
+          <div class="section-header-row">
+            <span class="section-label">Pinned World Locations</span>
+            <span class="section-tip">Click any location card to sync the primary dial</span>
+          </div>
+          <div class="pinned-grid" id="pinnedGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
 </html>
