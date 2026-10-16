@@ -1,559 +1,307 @@
-const hr = document.getElementById('hour');
-const min = document.getElementById('min');
-const sec = document.getElementById('sec');
-const ticks = document.getElementById('ticks');
+const $ = id => document.getElementById(id);
+const hr = $('hour'), min = $('min'), sec = $('sec'), ticks = $('ticks');
+const worldModalBackdrop = $('worldModalBackdrop'), worldModal = $('worldModal'), worldModalTrigger = $('worldModalTrigger');
+const citySearchInput = $('citySearchInput'), searchClearBtn = $('searchClearBtn');
+const searchResultsSection = $('searchResultsSection'), searchResultCount = $('searchResultCount');
+const searchResultsGrid = $('searchResultsGrid'), pinnedGrid = $('pinnedGrid'), pinnedBadge = $('pinnedBadge');
+const brandSub = $('brandSub'), headerLocDisplay = $('headerLocationDisplay');
+const headerLocFlag = $('headerLocFlag'), headerLocName = $('headerLocName'), headerLocTime = $('headerLocTime');
+const headerLocOffset = $('headerLocOffset'), headerLocDayNight = $('headerLocDayNight');
 
-const worldModalTrigger = document.getElementById('worldModalTrigger');
-const pinnedBadge = document.getElementById('pinnedBadge');
-const headerLocationDisplay = document.getElementById('headerLocationDisplay');
-const headerLocFlag = document.getElementById('headerLocFlag');
-const headerLocName = document.getElementById('headerLocName');
-const headerLocTime = document.getElementById('headerLocTime');
-const headerLocOffset = document.getElementById('headerLocOffset');
-const headerLocDayNight = document.getElementById('headerLocDayNight');
+const CITIES = [
+  ['local', 'Local Device Time', 'Current Location', '', '📍', 'Local'],
+  ['ny', 'New York', 'United States', 'America/New_York', '🇺🇸'],
+  ['london', 'London', 'United Kingdom', 'Europe/London', '🇬🇧'],
+  ['paris', 'Paris', 'France', 'Europe/Paris', '🇫🇷'],
+  ['tokyo', 'Tokyo', 'Japan', 'Asia/Tokyo', '🇯🇵'],
+  ['dubai', 'Dubai', 'United Arab Emirates', 'Asia/Dubai', '🇦🇪'],
+  ['sydney', 'Sydney', 'Australia', 'Australia/Sydney', '🇦🇺'],
+  ['singapore', 'Singapore', 'Singapore', 'Asia/Singapore', '🇸🇬'],
+  ['hongkong', 'Hong Kong', 'China', 'Asia/Hong_Kong', '🇭🇰'],
+  ['losangeles', 'Los Angeles', 'United States', 'America/Los_Angeles', '🇺🇸'],
+  ['chicago', 'Chicago', 'United States', 'America/Chicago', '🇺🇸'],
+  ['toronto', 'Toronto', 'Canada', 'America/Toronto', '🇨🇦'],
+  ['vancouver', 'Vancouver', 'Canada', 'America/Vancouver', '🇨🇦'],
+  ['berlin', 'Berlin', 'Germany', 'Europe/Berlin', '🇩🇪'],
+  ['rome', 'Rome', 'Italy', 'Europe/Rome', '🇮🇹'],
+  ['madrid', 'Madrid', 'Spain', 'Europe/Madrid', '🇪🇸'],
+  ['amsterdam', 'Amsterdam', 'Netherlands', 'Europe/Amsterdam', '🇳🇱'],
+  ['zurich', 'Zurich', 'Switzerland', 'Europe/Zurich', '🇨🇭'],
+  ['stockholm', 'Stockholm', 'Sweden', 'Europe/Stockholm', '🇸🇪'],
+  ['athens', 'Athens', 'Greece', 'Europe/Athens', '🇬🇷'],
+  ['istanbul', 'Istanbul', 'Turkey', 'Europe/Istanbul', '🇹🇷'],
+  ['cairo', 'Cairo', 'Egypt', 'Africa/Cairo', '🇪🇬'],
+  ['riyadh', 'Riyadh', 'Saudi Arabia', 'Asia/Riyadh', '🇸🇦'],
+  ['mumbai', 'Mumbai / Delhi', 'India', 'Asia/Kolkata', '🇮🇳', 'Mumbai'],
+  ['dhaka', 'Dhaka', 'Bangladesh', 'Asia/Dhaka', '🇧🇩'],
+  ['bangkok', 'Bangkok', 'Thailand', 'Asia/Bangkok', '🇹🇭'],
+  ['seoul', 'Seoul', 'South Korea', 'Asia/Seoul', '🇰🇷'],
+  ['shanghai', 'Beijing / Shanghai', 'China', 'Asia/Shanghai', '🇨🇳', 'Shanghai'],
+  ['melbourne', 'Melbourne', 'Australia', 'Australia/Melbourne', '🇦🇺'],
+  ['auckland', 'Auckland', 'New Zealand', 'Pacific/Auckland', '🇳🇿'],
+  ['honolulu', 'Honolulu', 'United States', 'Pacific/Honolulu', '🇺🇸'],
+  ['anchorage', 'Anchorage', 'United States', 'America/Anchorage', '🇺🇸'],
+  ['saopaulo', 'São Paulo', 'Brazil', 'America/Sao_Paulo', '🇧🇷'],
+  ['buenosaires', 'Buenos Aires', 'Argentina', 'America/Argentina/Buenos_Aires', '🇦🇷'],
+  ['mexicocity', 'Mexico City', 'Mexico', 'America/Mexico_City', '🇲🇽'],
+  ['johannesburg', 'Johannesburg', 'South Africa', 'Africa/Johannesburg', '🇿🇦'],
+  ['nairobi', 'Nairobi', 'Kenya', 'Africa/Nairobi', '🇰🇪'],
+  ['jakarta', 'Jakarta', 'Indonesia', 'Asia/Jakarta', '🇮🇩'],
+  ['kualalumpur', 'Kuala Lumpur', 'Malaysia', 'Asia/Kuala_Lumpur', '🇲🇾'],
+  ['manila', 'Manila', 'Philippines', 'Asia/Manila', '🇵🇭'],
+  ['qatar', 'Doha', 'Qatar', 'Asia/Qatar', '🇶🇦'],
+  ['telaviv', 'Tel Aviv', 'Israel', 'Asia/Jerusalem', '🇮🇱'],
+  ['prague', 'Prague', 'Czech Republic', 'Europe/Prague', '🇨🇿'],
+  ['vienna', 'Vienna', 'Austria', 'Europe/Vienna', '🇦🇹'],
+  ['dublin', 'Dublin', 'Ireland', 'Europe/Dublin', '🇮🇪'],
+  ['lisbon', 'Lisbon', 'Portugal', 'Europe/Lisbon', '🇵🇹'],
+  ['helsinki', 'Helsinki', 'Finland', 'Europe/Helsinki', '🇫🇮'],
+  ['oslo', 'Oslo', 'Norway', 'Europe/Oslo', '🇳🇴'],
+  ['warsaw', 'Warsaw', 'Poland', 'Europe/Warsaw', '🇵🇱'],
+  ['brussels', 'Brussels', 'Belgium', 'Europe/Brussels', '🇧🇪'],
+  ['santiago', 'Santiago', 'Chile', 'America/Santiago', '🇨🇱'],
+  ['bogota', 'Bogotá', 'Colombia', 'America/Bogota', '🇨🇴'],
+  ['lima', 'Lima', 'Peru', 'America/Lima', '🇵🇪'],
+  ['reykjavik', 'Reykjavik', 'Iceland', 'Atlantic/Reykjavik', '🇮🇸']
+].map(([id, name, country, tz, flag, shortName]) => ({
+  id, name, country, tz: tz || null, flag, shortName: shortName || name,
+  _q: `${name} ${shortName || ''} ${country} ${tz}`.toLowerCase()
+}));
 
-const worldModalBackdrop = document.getElementById('worldModalBackdrop');
-const worldModal = document.getElementById('worldModal');
-const modalCloseBtn = document.getElementById('modalCloseBtn');
-const citySearchInput = document.getElementById('citySearchInput');
-const searchClearBtn = document.getElementById('searchClearBtn');
-const searchResultsSection = document.getElementById('searchResultsSection');
-const searchResultCount = document.getElementById('searchResultCount');
-const searchResultsGrid = document.getElementById('searchResultsGrid');
-const pinnedGrid = document.getElementById('pinnedGrid');
+const CITY_MAP = new Map(CITIES.map(c => [c.id, c]));
+const tzCache = {};
 
-const brandSub = document.getElementById('brandSub');
-const themeButtons = document.querySelectorAll('.theme-btn');
+function getTzOffsetMin(tz) {
+  if (!tz) return -new Date().getTimezoneOffset();
+  if (tzCache[tz] === undefined) {
+    try {
+      const d = new Date();
+      tzCache[tz] = Math.round((new Date(d.toLocaleString('en-US', { timeZone: tz })) - new Date(d.toLocaleString('en-US', { timeZone: 'UTC' }))) / 60000);
+    } catch { tzCache[tz] = 0; }
+  }
+  return tzCache[tz];
+}
 
-const THEME_SUBTITLES = { cyber: 'AUTOMATIC', rosegold: 'CHRONOMETER', stealth: 'TACTICAL' };
-const THEME_STORAGE_KEY = 'aura_watch_theme';
-const LOCATION_STORAGE_KEY = 'aura_active_location';
-const PINNED_STORAGE_KEY = 'aura_pinned_locations';
+const getCityDate = (tz, now = new Date()) => new Date(now.getTime() + (getTzOffsetMin(tz) - (-now.getTimezoneOffset())) * 60000);
 
-const WORLD_CITIES = [
-  { id: 'local', name: 'Local Device Time', shortName: 'Local', country: 'Current Location', tz: null, flag: '📍' },
-  { id: 'ny', name: 'New York', shortName: 'New York', country: 'United States', tz: 'America/New_York', flag: '🇺🇸' },
-  { id: 'london', name: 'London', shortName: 'London', country: 'United Kingdom', tz: 'Europe/London', flag: '🇬🇧' },
-  { id: 'paris', name: 'Paris', shortName: 'Paris', country: 'France', tz: 'Europe/Paris', flag: '🇫🇷' },
-  { id: 'tokyo', name: 'Tokyo', shortName: 'Tokyo', country: 'Japan', tz: 'Asia/Tokyo', flag: '🇯🇵' },
-  { id: 'dubai', name: 'Dubai', shortName: 'Dubai', country: 'United Arab Emirates', tz: 'Asia/Dubai', flag: '🇦🇪' },
-  { id: 'sydney', name: 'Sydney', shortName: 'Sydney', country: 'Australia', tz: 'Australia/Sydney', flag: '🇦🇺' },
-  { id: 'singapore', name: 'Singapore', shortName: 'Singapore', country: 'Singapore', tz: 'Asia/Singapore', flag: '🇸🇬' },
-  { id: 'hongkong', name: 'Hong Kong', shortName: 'Hong Kong', country: 'China', tz: 'Asia/Hong_Kong', flag: '🇭🇰' },
-  { id: 'losangeles', name: 'Los Angeles', shortName: 'Los Angeles', country: 'United States', tz: 'America/Los_Angeles', flag: '🇺🇸' },
-  { id: 'chicago', name: 'Chicago', shortName: 'Chicago', country: 'United States', tz: 'America/Chicago', flag: '🇺🇸' },
-  { id: 'toronto', name: 'Toronto', shortName: 'Toronto', country: 'Canada', tz: 'America/Toronto', flag: '🇨🇦' },
-  { id: 'vancouver', name: 'Vancouver', shortName: 'Vancouver', country: 'Canada', tz: 'America/Vancouver', flag: '🇨🇦' },
-  { id: 'berlin', name: 'Berlin', shortName: 'Berlin', country: 'Germany', tz: 'Europe/Berlin', flag: '🇩🇪' },
-  { id: 'rome', name: 'Rome', shortName: 'Rome', country: 'Italy', tz: 'Europe/Rome', flag: '🇮🇹' },
-  { id: 'madrid', name: 'Madrid', shortName: 'Madrid', country: 'Spain', tz: 'Europe/Madrid', flag: '🇪🇸' },
-  { id: 'amsterdam', name: 'Amsterdam', shortName: 'Amsterdam', country: 'Netherlands', tz: 'Europe/Amsterdam', flag: '🇳🇱' },
-  { id: 'zurich', name: 'Zurich', shortName: 'Zurich', country: 'Switzerland', tz: 'Europe/Zurich', flag: '🇨🇭' },
-  { id: 'stockholm', name: 'Stockholm', shortName: 'Stockholm', country: 'Sweden', tz: 'Europe/Stockholm', flag: '🇸🇪' },
-  { id: 'athens', name: 'Athens', shortName: 'Athens', country: 'Greece', tz: 'Europe/Athens', flag: '🇬🇷' },
-  { id: 'istanbul', name: 'Istanbul', shortName: 'Istanbul', country: 'Turkey', tz: 'Europe/Istanbul', flag: '🇹🇷' },
-  { id: 'cairo', name: 'Cairo', shortName: 'Cairo', country: 'Egypt', tz: 'Africa/Cairo', flag: '🇪🇬' },
-  { id: 'riyadh', name: 'Riyadh', shortName: 'Riyadh', country: 'Saudi Arabia', tz: 'Asia/Riyadh', flag: '🇸🇦' },
-  { id: 'mumbai', name: 'Mumbai / Delhi', shortName: 'Mumbai', country: 'India', tz: 'Asia/Kolkata', flag: '🇮🇳' },
-  { id: 'dhaka', name: 'Dhaka', shortName: 'Dhaka', country: 'Bangladesh', tz: 'Asia/Dhaka', flag: '🇧🇩' },
-  { id: 'bangkok', name: 'Bangkok', shortName: 'Bangkok', country: 'Thailand', tz: 'Asia/Bangkok', flag: '🇹🇭' },
-  { id: 'seoul', name: 'Seoul', shortName: 'Seoul', country: 'South Korea', tz: 'Asia/Seoul', flag: '🇰🇷' },
-  { id: 'shanghai', name: 'Beijing / Shanghai', shortName: 'Shanghai', country: 'China', tz: 'Asia/Shanghai', flag: '🇨🇳' },
-  { id: 'melbourne', name: 'Melbourne', shortName: 'Melbourne', country: 'Australia', tz: 'Australia/Melbourne', flag: '🇦🇺' },
-  { id: 'auckland', name: 'Auckland', shortName: 'Auckland', country: 'New Zealand', tz: 'Pacific/Auckland', flag: '🇳🇿' },
-  { id: 'honolulu', name: 'Honolulu', shortName: 'Honolulu', country: 'United States', tz: 'Pacific/Honolulu', flag: '🇺🇸' },
-  { id: 'anchorage', name: 'Anchorage', shortName: 'Anchorage', country: 'United States', tz: 'America/Anchorage', flag: '🇺🇸' },
-  { id: 'saopaulo', name: 'São Paulo', shortName: 'São Paulo', country: 'Brazil', tz: 'America/Sao_Paulo', flag: '🇧🇷' },
-  { id: 'buenosaires', name: 'Buenos Aires', shortName: 'Buenos Aires', country: 'Argentina', tz: 'America/Argentina/Buenos_Aires', flag: '🇦🇷' },
-  { id: 'mexicocity', name: 'Mexico City', shortName: 'Mexico City', country: 'Mexico', tz: 'America/Mexico_City', flag: '🇲🇽' },
-  { id: 'johannesburg', name: 'Johannesburg', shortName: 'Johannesburg', country: 'South Africa', tz: 'Africa/Johannesburg', flag: '🇿🇦' },
-  { id: 'nairobi', name: 'Nairobi', shortName: 'Nairobi', country: 'Kenya', tz: 'Africa/Nairobi', flag: '🇰🇪' },
-  { id: 'jakarta', name: 'Jakarta', shortName: 'Jakarta', country: 'Indonesia', tz: 'Asia/Jakarta', flag: '🇮🇩' },
-  { id: 'kualalumpur', name: 'Kuala Lumpur', shortName: 'Kuala Lumpur', country: 'Malaysia', tz: 'Asia/Kuala_Lumpur', flag: '🇲🇾' },
-  { id: 'manila', name: 'Manila', shortName: 'Manila', country: 'Philippines', tz: 'Asia/Manila', flag: '🇵🇭' },
-  { id: 'qatar', name: 'Doha', shortName: 'Doha', country: 'Qatar', tz: 'Asia/Qatar', flag: '🇶🇦' },
-  { id: 'telaviv', name: 'Tel Aviv', shortName: 'Tel Aviv', country: 'Israel', tz: 'Asia/Jerusalem', flag: '🇮🇱' },
-  { id: 'prague', name: 'Prague', shortName: 'Prague', country: 'Czech Republic', tz: 'Europe/Prague', flag: '🇨🇿' },
-  { id: 'vienna', name: 'Vienna', shortName: 'Vienna', country: 'Austria', tz: 'Europe/Vienna', flag: '🇦🇹' },
-  { id: 'dublin', name: 'Dublin', shortName: 'Dublin', country: 'Ireland', tz: 'Europe/Dublin', flag: '🇮🇪' },
-  { id: 'lisbon', name: 'Lisbon', shortName: 'Lisbon', country: 'Portugal', tz: 'Europe/Lisbon', flag: '🇵🇹' },
-  { id: 'helsinki', name: 'Helsinki', shortName: 'Helsinki', country: 'Finland', tz: 'Europe/Helsinki', flag: '🇫🇮' },
-  { id: 'oslo', name: 'Oslo', shortName: 'Oslo', country: 'Norway', tz: 'Europe/Oslo', flag: '🇳🇴' },
-  { id: 'warsaw', name: 'Warsaw', shortName: 'Warsaw', country: 'Poland', tz: 'Europe/Warsaw', flag: '🇵🇱' },
-  { id: 'brussels', name: 'Brussels', shortName: 'Brussels', country: 'Belgium', tz: 'Europe/Brussels', flag: '🇧🇪' },
-  { id: 'santiago', name: 'Santiago', shortName: 'Santiago', country: 'Chile', tz: 'America/Santiago', flag: '🇨🇱' },
-  { id: 'bogota', name: 'Bogotá', shortName: 'Bogotá', country: 'Colombia', tz: 'America/Bogota', flag: '🇨🇴' },
-  { id: 'lima', name: 'Lima', shortName: 'Lima', country: 'Peru', tz: 'America/Lima', flag: '🇵🇪' },
-  { id: 'reykjavik', name: 'Reykjavik', shortName: 'Reykjavik', country: 'Iceland', tz: 'Atlantic/Reykjavik', flag: '🇮🇸' }
-];
+function getUtcOffsetString(m) {
+  const sign = m >= 0 ? '+' : '-';
+  const abs = Math.abs(m), min = abs % 60;
+  return `UTC${sign}${Math.floor(abs / 60)}${min ? ':' + String(min).padStart(2, '0') : ''}`;
+}
 
-const CITY_MAP = new Map();
-WORLD_CITIES.forEach(c => {
-  CITY_MAP.set(c.id, c);
-  c._searchStr = `${c.name} ${c.shortName} ${c.country} ${c.tz || ''}`.toLowerCase();
-});
+function getRelativeDiffString(targetMin) {
+  const diff = targetMin - (-new Date().getTimezoneOffset());
+  if (!diff) return 'Same as local';
+  const abs = Math.abs(diff), h = Math.floor(abs / 60), m = abs % 60;
+  return `${diff > 0 ? '+' : '-'}${h ? h + (m ? `h ${m}m` : ' hrs') : m + 'm'} ${diff > 0 ? 'ahead' : 'behind'}`;
+}
 
-const DEFAULT_PINNED_IDS = ['local', 'ny', 'london', 'tokyo', 'dubai', 'sydney'];
+const getDayNight = d => ({ icon: d.getHours() >= 6 && d.getHours() < 18 ? '☀️' : '🌙', label: d.getHours() >= 6 && d.getHours() < 18 ? 'Daytime' : 'Night' });
+
+function formatTime(d) {
+  const pad = n => String(n).padStart(2, '0');
+  const h = d.getHours();
+  return { time: `${pad(h % 12 || 12)}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`, ampm: h >= 12 ? 'PM' : 'AM' };
+}
+
+let pinnedLocationIds = ['local', 'ny', 'london', 'tokyo', 'dubai', 'sydney'];
 let activeLocationId = 'local';
-let pinnedLocationIds = [...DEFAULT_PINNED_IDS];
 let isModalOpen = false;
 
 try {
-  const savedActive = localStorage.getItem(LOCATION_STORAGE_KEY);
-  if (savedActive && CITY_MAP.has(savedActive)) activeLocationId = savedActive;
-  const savedPinned = JSON.parse(localStorage.getItem(PINNED_STORAGE_KEY));
-  if (Array.isArray(savedPinned) && savedPinned.length) {
-    pinnedLocationIds = savedPinned.filter(id => CITY_MAP.has(id));
-    if (!pinnedLocationIds.includes('local')) pinnedLocationIds.unshift('local');
-  }
-} catch (e) {}
-
+  const sa = localStorage.getItem('aura_active_location');
+  if (sa && CITY_MAP.has(sa)) activeLocationId = sa;
+  const sp = JSON.parse(localStorage.getItem('aura_pinned_locations'));
+  if (Array.isArray(sp)) pinnedLocationIds = sp.filter(id => CITY_MAP.has(id));
+} catch {}
 if (!pinnedLocationIds.includes(activeLocationId)) pinnedLocationIds.push(activeLocationId);
+let activeCity = CITY_MAP.get(activeLocationId) || CITIES[0];
 
 function saveState() {
-  try {
-    localStorage.setItem(LOCATION_STORAGE_KEY, activeLocationId);
-    localStorage.setItem(PINNED_STORAGE_KEY, JSON.stringify(pinnedLocationIds));
-  } catch (e) {}
+  localStorage.setItem('aura_active_location', activeLocationId);
+  localStorage.setItem('aura_pinned_locations', JSON.stringify(pinnedLocationIds));
 }
 
-const getCityById = id => CITY_MAP.get(id) || WORLD_CITIES[0];
-let activeCity = getCityById(activeLocationId);
-let activeCityOffsetMs = 0;
-
-if (ticks) {
-  const frag = document.createDocumentFragment();
-  for (let i = 0; i < 60; i++) {
-    const t = document.createElement('div');
-    const isMajor = i % 5 === 0;
-    t.className = isMajor ? 'tick major' : 'tick';
-    t.style.transform = `rotate(${i * 6}deg) translateY(${isMajor ? 'calc(-0.5 * var(--size) + 14px)' : 'calc(-0.5 * var(--size) + 11px)'})`;
-    frag.appendChild(t);
-  }
-  ticks.appendChild(frag);
-}
-
-const offsetCache = new Map();
-let lastCacheRefresh = 0;
-
-function getCityOffsetFromLocalMs(tz) {
-  if (!tz) return 0;
-  const now = Date.now();
-  if (now - lastCacheRefresh > 600000) {
-    offsetCache.clear();
-    lastCacheRefresh = now;
-  }
-  if (offsetCache.has(tz)) return offsetCache.get(tz);
-  try {
-    const d = new Date();
-    const utc = new Date(d.toLocaleString('en-US', { timeZone: 'UTC' }));
-    const target = new Date(d.toLocaleString('en-US', { timeZone: tz }));
-    const diffMs = (target.getTime() - utc.getTime()) - (-d.getTimezoneOffset() * 60000);
-    offsetCache.set(tz, diffMs);
-    return diffMs;
-  } catch (e) {
-    return 0;
-  }
-}
-
-const recycledDate = new Date();
-const getCityDate = (tz, base = new Date()) => new Date(base.getTime() + getCityOffsetFromLocalMs(tz));
-
-function getUtcOffsetString(tz) {
-  if (!tz) {
-    const min = -new Date().getTimezoneOffset();
-    const sign = min >= 0 ? '+' : '-';
-    const h = Math.floor(Math.abs(min) / 60);
-    const m = Math.abs(min) % 60;
-    return m ? `UTC${sign}${h}:${m < 10 ? '0' + m : m}` : `UTC${sign}${h}`;
-  }
-  try {
-    const d = new Date();
-    const utc = new Date(d.toLocaleString('en-US', { timeZone: 'UTC' }));
-    const target = new Date(d.toLocaleString('en-US', { timeZone: tz }));
-    const diffMin = Math.round((target.getTime() - utc.getTime()) / 60000);
-    const sign = diffMin >= 0 ? '+' : '-';
-    const h = Math.floor(Math.abs(diffMin) / 60);
-    const m = Math.abs(diffMin) % 60;
-    return m ? `UTC${sign}${h}:${m < 10 ? '0' + m : m}` : `UTC${sign}${h}`;
-  } catch (e) {
-    return 'UTC+0';
-  }
-}
-
-function getRelativeDiffString(tz) {
-  const diffMin = Math.round(getCityOffsetFromLocalMs(tz) / 60000);
-  if (!diffMin) return 'Same as local';
-  const abs = Math.abs(diffMin);
-  const h = Math.floor(abs / 60);
-  const m = abs % 60;
-  const unit = diffMin > 0 ? 'ahead' : 'behind';
-  return `${diffMin > 0 ? '+' : '-'}${h ? h + (m ? `h ${m}m` : ' hrs') : m + 'm'} ${unit}`;
-}
-
-function getDayNight(d) {
-  const isDay = d.getHours() >= 6 && d.getHours() < 18;
-  return { icon: isDay ? '☀️' : '🌙', label: isDay ? 'Daytime' : 'Night' };
-}
-
-function formatDigitalTime(d, includeSeconds = true) {
-  const h24 = d.getHours();
-  const h12 = h24 % 12 || 12;
-  const m = d.getMinutes();
-  const hStr = h12 < 10 ? '0' + h12 : '' + h12;
-  const mStr = m < 10 ? '0' + m : '' + m;
-  const ampm = h24 >= 12 ? 'PM' : 'AM';
-  if (!includeSeconds) return `${hStr}:${mStr} ${ampm}`;
-  const s = d.getSeconds();
-  return { time: `${hStr}:${mStr}:${s < 10 ? '0' + s : s}`, ampm };
-}
-
-let isTransitioning = false;
-let transitionStartTime = 0;
-const TRANSITION_DURATION = 550;
-let transitionStartHr = 0, transitionEndHr = 0;
-let transitionStartMin = 0, transitionEndMin = 0;
-let currentRenderedHr = 0, currentRenderedMin = 0;
-
-const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
-const shortestAngleDelta = (cur, target) => ((target - (cur % 360) + 540) % 360) - 180;
-
-function switchLocation(newLocationId, animate = true) {
-  const oldCity = activeCity;
-  const newCity = getCityById(newLocationId);
-  activeLocationId = newCity.id;
-  activeCity = newCity;
-  activeCityOffsetMs = getCityOffsetFromLocalMs(newCity.tz);
-
-  if (!pinnedLocationIds.includes(activeLocationId)) pinnedLocationIds.push(activeLocationId);
-  saveState();
-
-  updateHeaderLocationDisplay(newCity);
-  updateModalCardStates();
-
-  if (animate) {
-    const now = new Date();
-    const oldDate = getCityDate(oldCity.tz, now);
-    const newDate = getCityDate(newCity.tz, now);
-    const oldHrDeg = ((oldDate.getHours() % 12) + oldDate.getMinutes() / 60 + oldDate.getSeconds() / 3600) * 30;
-    const newHrDeg = ((newDate.getHours() % 12) + newDate.getMinutes() / 60 + newDate.getSeconds() / 3600) * 30;
-    const oldMinDeg = (oldDate.getMinutes() + oldDate.getSeconds() / 60) * 6;
-    const newMinDeg = (newDate.getMinutes() + newDate.getSeconds() / 60) * 6;
-
-    transitionStartHr = currentRenderedHr || oldHrDeg;
-    transitionEndHr = transitionStartHr + shortestAngleDelta(transitionStartHr, newHrDeg);
-    transitionStartMin = currentRenderedMin || oldMinDeg;
-    transitionEndMin = transitionStartMin + shortestAngleDelta(transitionStartMin, newMinDeg);
-    transitionStartTime = performance.now();
-    isTransitioning = true;
-  } else {
-    isTransitioning = false;
-  }
-}
-
-activeCityOffsetMs = getCityOffsetFromLocalMs(activeCity.tz);
-
-function updateHeaderLocationDisplay(city, now = new Date()) {
-  if (!headerLocName) return;
+function updateHeaderLocation(city, d = getCityDate(city.tz)) {
   headerLocName.textContent = city.id === 'local' ? 'LOCAL TIME' : city.shortName.toUpperCase();
-  if (headerLocFlag) headerLocFlag.textContent = city.flag;
-  const offsetStr = getUtcOffsetString(city.tz);
-  if (headerLocOffset) headerLocOffset.textContent = offsetStr;
-
-  const cityDate = getCityDate(city.tz, now);
-  const dn = getDayNight(cityDate);
-  if (headerLocDayNight) {
-    headerLocDayNight.textContent = dn.icon;
-    headerLocDayNight.title = dn.label;
-  }
-  const formatted = formatDigitalTime(cityDate, true);
-  if (headerLocTime) headerLocTime.textContent = `${formatted.time} ${formatted.ampm}`;
-  if (headerLocationDisplay) headerLocationDisplay.setAttribute('aria-label', `Active Location: ${city.name} (${offsetStr})`);
-}
-
-function updateHeaderLiveTime() {
-  if (!headerLocTime) return;
-  recycledDate.setTime(Date.now() + activeCityOffsetMs);
-  const f = formatDigitalTime(recycledDate, true);
+  headerLocFlag.textContent = city.flag;
+  const offset = getTzOffsetMin(city.tz);
+  headerLocOffset.textContent = getUtcOffsetString(offset);
+  const dn = getDayNight(d);
+  headerLocDayNight.textContent = dn.icon;
+  headerLocDayNight.title = dn.label;
+  const f = formatTime(d);
   headerLocTime.textContent = `${f.time} ${f.ampm}`;
+  headerLocDisplay.setAttribute('aria-label', `Active Location: ${city.name} (${getUtcOffsetString(offset)})`);
 }
 
-if (headerLocationDisplay) headerLocationDisplay.addEventListener('click', openWorldModal);
-
-function renderPinnedCards() {
-  if (!pinnedGrid) return;
-  const frag = document.createDocumentFragment();
+function cityCardHtml(city, isPinned = false) {
+  const d = getCityDate(city.tz);
   const now = new Date();
-  pinnedLocationIds.forEach(id => frag.appendChild(createCityCard(getCityById(id), now, true)));
-  pinnedGrid.replaceChildren(frag);
-}
-
-function createCityCard(city, now = new Date(), isPinned = false) {
-  const card = document.createElement('div');
+  const f = formatTime(d);
+  const dn = getDayNight(d);
+  const offset = getTzOffsetMin(city.tz);
+  const offsetStr = getUtcOffsetString(offset);
+  const diffStr = getRelativeDiffString(offset);
   const isActive = city.id === activeLocationId;
-  card.className = `city-card ${isActive ? 'active' : ''}`;
-  card.dataset.cardLocId = city.id;
-  card.setAttribute('tabindex', '0');
-  card.setAttribute('role', 'button');
-  card.setAttribute('aria-label', `${city.name}, ${city.country}. Click to set on primary dial`);
+  const lDate = now.getDate(), cDate = d.getDate();
+  const dayStr = cDate > lDate || (cDate === 1 && lDate > 27) ? 'Tomorrow' : (cDate < lDate || (lDate === 1 && cDate > 27) ? 'Yesterday' : 'Today');
 
-  const cityDate = getCityDate(city.tz, now);
-  const formatted = formatDigitalTime(cityDate, true);
-  const offsetStr = getUtcOffsetString(city.tz);
-  const diffStr = getRelativeDiffString(city.tz);
-  const dn = getDayNight(cityDate);
-
-  const localDate = now.getDate(), cDate = cityDate.getDate();
-  let dayDiffStr = 'Today';
-  if (cDate > localDate || (cDate === 1 && localDate > 27)) dayDiffStr = 'Tomorrow';
-  else if (cDate < localDate || (localDate === 1 && cDate > 27)) dayDiffStr = 'Yesterday';
-
-  card.innerHTML = `
-    <div class="card-top">
-      <div class="card-city-info">
-        <span class="card-flag">${city.flag}</span>
-        <div class="card-names">
-          <span class="card-city-name">${city.name}</span>
-          <span class="card-country">${city.country}</span>
+  return `
+    <div class="city-card ${isActive ? 'active' : ''}" data-city-id="${city.id}" tabindex="0" role="button" aria-label="${city.name}">
+      <div class="card-top">
+        <div class="card-city-info">
+          <span class="card-flag">${city.flag}</span>
+          <div class="card-names"><span class="card-city-name">${city.name}</span><span class="card-country">${city.country}</span></div>
+        </div>
+        <div class="card-badges"><span class="card-dn-badge">${dn.icon} ${dn.label}</span></div>
+      </div>
+      <div class="card-time-row">
+        <div class="card-digital-time" data-card-time="${city.id}">${f.time} ${f.ampm}</div>
+        <span class="card-offset-badge">${offsetStr}</span>
+      </div>
+      <div class="card-meta-row">
+        <span class="card-diff">${diffStr} • ${dayStr}</span>
+        <div class="card-actions">
+          ${isActive ? '<span class="card-active-pill">ACTIVE DIAL</span>' : `<button class="card-btn set-dial-btn" type="button" data-city-id="${city.id}">Set on Dial</button>`}
+          ${isPinned && city.id !== 'local' ? `<button class="card-remove-btn" type="button" data-city-id="${city.id}" title="Unpin city">✕</button>` : ''}
+          ${!isPinned ? `<button class="card-btn pin-city-btn" type="button" data-city-id="${city.id}">+ Pin & Switch</button>` : ''}
         </div>
       </div>
-      <div class="card-badges"><span class="card-dn-badge">${dn.icon} ${dn.label}</span></div>
-    </div>
-    <div class="card-time-row">
-      <div class="card-digital-time" data-card-time="${city.id}">${formatted.time} ${formatted.ampm}</div>
-      <span class="card-offset-badge">${offsetStr}</span>
-    </div>
-    <div class="card-meta-row">
-      <span class="card-diff">${diffStr} • ${dayDiffStr}</span>
-      <div class="card-actions">
-        ${isActive ? '<span class="card-active-pill">ACTIVE DIAL</span>' : `<button class="card-btn set-dial-btn" type="button" data-city-id="${city.id}">Set on Dial</button>`}
-        ${isPinned && city.id !== 'local' ? `<button class="card-remove-btn" type="button" data-city-id="${city.id}" title="Unpin city" aria-label="Unpin ${city.name}">✕</button>` : ''}
-        ${!isPinned ? `<button class="card-btn pin-city-btn" type="button" data-city-id="${city.id}">+ Pin & Switch</button>` : ''}
-      </div>
-    </div>
-  `;
-  return card;
+    </div>`;
 }
 
-if (worldModal) {
-  worldModal.addEventListener('click', e => {
-    const removeBtn = e.target.closest('.card-remove-btn');
-    if (removeBtn) {
-      e.stopPropagation();
-      return unpinCity(removeBtn.dataset.cityId);
-    }
-    const pinBtn = e.target.closest('.pin-city-btn');
-    if (pinBtn) {
-      e.stopPropagation();
-      pinCity(pinBtn.dataset.cityId);
-      return switchLocation(pinBtn.dataset.cityId, true);
-    }
-    const setDialBtn = e.target.closest('.set-dial-btn');
-    if (setDialBtn) {
-      e.stopPropagation();
-      return switchLocation(setDialBtn.dataset.cityId, true);
-    }
-    const card = e.target.closest('.city-card');
-    if (card && card.dataset.cardLocId) switchLocation(card.dataset.cardLocId, true);
-  });
-
-  worldModal.addEventListener('keydown', e => {
-    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('city-card')) {
-      e.preventDefault();
-      switchLocation(e.target.dataset.cardLocId, true);
-    }
-  });
+function renderPinnedCards() {
+  pinnedGrid.innerHTML = pinnedLocationIds.map(id => cityCardHtml(CITY_MAP.get(id), true)).join('');
 }
 
-function updateModalCardStates() {
-  document.querySelectorAll('.city-card').forEach(card => {
-    const cardId = card.dataset.cardLocId;
-    if (!cardId) return;
-    const isNowActive = cardId === activeLocationId;
-    card.classList.toggle('active', isNowActive);
-    const actionDiv = card.querySelector('.card-actions');
-    if (actionDiv && card.closest('.pinned-grid')) {
-      actionDiv.innerHTML = `
-        ${isNowActive ? '<span class="card-active-pill">ACTIVE DIAL</span>' : `<button class="card-btn set-dial-btn" type="button" data-city-id="${cardId}">Set on Dial</button>`}
-        ${pinnedLocationIds.includes(cardId) && cardId !== 'local' ? `<button class="card-remove-btn" type="button" data-city-id="${cardId}" title="Unpin city" aria-label="Unpin city">✕</button>` : ''}
-      `;
-    }
-  });
+function switchLocation(id) {
+  activeLocationId = id;
+  activeCity = CITY_MAP.get(id) || CITIES[0];
+  if (!pinnedLocationIds.includes(id)) pinnedLocationIds.push(id);
+  saveState();
+  updateHeaderLocation(activeCity);
+  renderPinnedCards();
+  if (citySearchInput.value) handleSearch(citySearchInput.value);
+  hr.style.transition = min.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+  setTimeout(() => { hr.style.transition = min.style.transition = ''; }, 500);
+}
+
+function pinCity(id) {
+  if (!pinnedLocationIds.includes(id)) {
+    pinnedLocationIds.push(id);
+    saveState();
+    pinnedBadge.textContent = pinnedLocationIds.length;
+    renderPinnedCards();
+  }
+}
+
+function unpinCity(id) {
+  if (id === 'local') return;
+  pinnedLocationIds = pinnedLocationIds.filter(x => x !== id);
+  if (activeLocationId === id) switchLocation('local');
+  saveState();
+  pinnedBadge.textContent = pinnedLocationIds.length;
+  renderPinnedCards();
+}
+
+function handleSearch(q) {
+  const query = q.trim().toLowerCase();
+  searchResultsSection.style.display = searchClearBtn.style.display = query ? 'block' : 'none';
+  if (!query) return;
+  const matches = CITIES.filter(c => c._q.includes(query));
+  searchResultCount.textContent = matches.length;
+  searchResultsGrid.innerHTML = matches.length
+    ? matches.map(c => cityCardHtml(c, pinnedLocationIds.includes(c.id))).join('')
+    : `<div class="search-empty-state" style="grid-column:1/-1;">No locations found matching "${q}".</div>`;
 }
 
 function updateLiveCardTimes() {
-  const now = new Date();
   document.querySelectorAll('[data-card-time]').forEach(el => {
-    const cityId = el.getAttribute('data-card-time');
-    if (cityId) {
-      const f = formatDigitalTime(getCityDate(getCityById(cityId).tz, now), true);
+    const c = CITY_MAP.get(el.dataset.cardTime);
+    if (c) {
+      const f = formatTime(getCityDate(c.tz));
       el.textContent = `${f.time} ${f.ampm}`;
     }
   });
 }
 
-function pinCity(cityId) {
-  if (!pinnedLocationIds.includes(cityId)) {
-    pinnedLocationIds.push(cityId);
-    saveState();
-    if (pinnedBadge) pinnedBadge.textContent = pinnedLocationIds.length;
-    renderPinnedCards();
+worldModal.onclick = e => {
+  const rm = e.target.closest('.card-remove-btn');
+  if (rm) { e.stopPropagation(); return unpinCity(rm.dataset.cityId); }
+  const pin = e.target.closest('.pin-city-btn');
+  if (pin) { e.stopPropagation(); pinCity(pin.dataset.cityId); return switchLocation(pin.dataset.cityId); }
+  const set = e.target.closest('.set-dial-btn');
+  if (set) { e.stopPropagation(); return switchLocation(set.dataset.cityId); }
+  const card = e.target.closest('.city-card');
+  if (card && card.dataset.cityId) switchLocation(card.dataset.cityId);
+};
+
+worldModal.onkeydown = e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('city-card')) {
+    e.preventDefault();
+    switchLocation(e.target.dataset.cityId);
   }
-}
+};
 
-function unpinCity(cityId) {
-  if (cityId === 'local') return;
-  pinnedLocationIds = pinnedLocationIds.filter(id => id !== cityId);
-  if (activeLocationId === cityId) switchLocation('local', true);
-  saveState();
-  if (pinnedBadge) pinnedBadge.textContent = pinnedLocationIds.length;
-  renderPinnedCards();
-}
+const toggleModal = open => {
+  isModalOpen = open;
+  worldModalBackdrop.classList.toggle('open', open);
+  worldModalBackdrop.setAttribute('aria-hidden', !open);
+  if (open) { renderPinnedCards(); citySearchInput.focus(); }
+  else { citySearchInput.value = ''; handleSearch(''); }
+};
 
-let searchDebounce = null;
-function handleSearch(query) {
-  const clean = query.trim().toLowerCase();
-  if (!clean) {
-    searchResultsSection.style.display = 'none';
-    searchClearBtn.style.display = 'none';
-    return;
-  }
-  searchClearBtn.style.display = 'block';
-  searchResultsSection.style.display = 'block';
-  const matches = WORLD_CITIES.filter(c => c._searchStr.includes(clean));
-  searchResultCount.textContent = matches.length;
+worldModalTrigger.onclick = headerLocDisplay.onclick = () => toggleModal(true);
+$('modalCloseBtn').onclick = () => toggleModal(false);
+worldModalBackdrop.onclick = e => e.target === worldModalBackdrop && toggleModal(false);
+window.onkeydown = e => e.key === 'Escape' && isModalOpen && toggleModal(false);
+citySearchInput.oninput = e => handleSearch(e.target.value);
+searchClearBtn.onclick = () => { citySearchInput.value = ''; handleSearch(''); citySearchInput.focus(); };
 
-  if (!matches.length) {
-    searchResultsGrid.innerHTML = `<div class="search-empty-state" style="grid-column:1/-1;">No locations found matching "${query}".</div>`;
-    return;
-  }
-  const frag = document.createDocumentFragment();
-  const now = new Date();
-  matches.forEach(city => frag.appendChild(createCityCard(city, now, pinnedLocationIds.includes(city.id))));
-  searchResultsGrid.replaceChildren(frag);
-}
-
-if (citySearchInput) {
-  citySearchInput.addEventListener('input', e => {
-    clearTimeout(searchDebounce);
-    searchDebounce = setTimeout(() => handleSearch(e.target.value), 80);
+const themes = { cyber: 'AUTOMATIC', rosegold: 'CHRONOMETER', stealth: 'TACTICAL' };
+const themeButtons = document.querySelectorAll('.theme-btn');
+function setTheme(t) {
+  document.body.dataset.theme = t in themes ? t : 'cyber';
+  brandSub.textContent = themes[document.body.dataset.theme];
+  themeButtons.forEach(b => {
+    const active = b.dataset.theme === document.body.dataset.theme;
+    b.classList.toggle('active', active);
+    b.setAttribute('aria-checked', active);
   });
+  localStorage.setItem('aura_watch_theme', document.body.dataset.theme);
+}
+themeButtons.forEach(b => b.onclick = () => setTheme(b.dataset.theme));
+setTheme(localStorage.getItem('aura_watch_theme') || 'cyber');
+
+if (ticks) {
+  ticks.innerHTML = Array.from({length: 60}, (_, i) => `<div class="tick${i % 5 ? '' : ' major'}" style="transform:rotate(${i * 6}deg) translateY(${i % 5 ? 'calc(-0.5 * var(--size) + 11px)' : 'calc(-0.5 * var(--size) + 14px)'})"></div>`).join('');
 }
 
-if (searchClearBtn) {
-  searchClearBtn.addEventListener('click', () => {
-    citySearchInput.value = '';
-    handleSearch('');
-    citySearchInput.focus();
-  });
-}
-
-function openWorldModal() {
-  if (!worldModalBackdrop) return;
-  isModalOpen = true;
-  renderPinnedCards();
-  worldModalBackdrop.classList.add('open');
-  worldModalBackdrop.setAttribute('aria-hidden', 'false');
-  setTimeout(() => citySearchInput && citySearchInput.focus(), 100);
-}
-
-function closeWorldModal() {
-  if (!worldModalBackdrop) return;
-  isModalOpen = false;
-  worldModalBackdrop.classList.remove('open');
-  worldModalBackdrop.setAttribute('aria-hidden', 'true');
-  if (citySearchInput) {
-    citySearchInput.value = '';
-    handleSearch('');
-  }
-}
-
-if (worldModalTrigger) worldModalTrigger.addEventListener('click', openWorldModal);
-if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeWorldModal);
-if (worldModalBackdrop) {
-  worldModalBackdrop.addEventListener('click', e => {
-    if (e.target === worldModalBackdrop) closeWorldModal();
-  });
-}
-window.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && isModalOpen) closeWorldModal();
-});
-
-function setTheme(name) {
-  if (!THEME_SUBTITLES[name]) name = 'cyber';
-  document.body.setAttribute('data-theme', name);
-  if (brandSub) brandSub.textContent = THEME_SUBTITLES[name];
-  themeButtons.forEach(btn => {
-    const active = btn.dataset.theme === name;
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-checked', active ? 'true' : 'false');
-  });
-  try { localStorage.setItem(THEME_STORAGE_KEY, name); } catch (e) {}
-}
-
-themeButtons.forEach(btn => {
-  btn.addEventListener('click', () => btn.dataset.theme && setTheme(btn.dataset.theme));
-});
-
-let initialTheme = 'cyber';
-try {
-  const saved = localStorage.getItem(THEME_STORAGE_KEY);
-  if (saved && THEME_SUBTITLES[saved]) initialTheme = saved;
-} catch (e) {}
-setTheme(initialTheme);
-
-updateHeaderLocationDisplay(activeCity);
-if (pinnedBadge) pinnedBadge.textContent = pinnedLocationIds.length;
+updateHeaderLocation(activeCity);
+pinnedBadge.textContent = pinnedLocationIds.length;
 renderPinnedCards();
 
-let lastLiveSecondTick = 0;
+let lastSec = 0, hrDeg = 0, minDeg = 0;
+const shortest = (cur, target) => cur + ((target - (cur % 360) + 540) % 360) - 180;
 
-function updateClock(timestamp) {
-  const nowMs = Date.now();
-  recycledDate.setTime(nowMs + activeCityOffsetMs);
-
-  const ms = recycledDate.getMilliseconds();
-  const s = recycledDate.getSeconds() + ms / 1000;
-  const m = recycledDate.getMinutes() + s / 60;
-  const h = (recycledDate.getHours() % 12) + m / 60;
-
+function updateClock() {
+  const d = getCityDate(activeCity.tz);
+  const ms = d.getMilliseconds(), s = d.getSeconds() + ms / 1000, m = d.getMinutes() + s / 60, h = (d.getHours() % 12) + m / 60;
   sec.style.setProperty('--sec', `${s * 6}deg`);
+  minDeg = shortest(minDeg, m * 6);
+  hrDeg = shortest(hrDeg, h * 30);
+  min.style.setProperty('--min', `${minDeg}deg`);
+  hr.style.setProperty('--hr', `${hrDeg}deg`);
 
-  if (isTransitioning) {
-    const elapsed = timestamp - transitionStartTime;
-    if (elapsed >= TRANSITION_DURATION) {
-      isTransitioning = false;
-      currentRenderedHr = h * 30;
-      currentRenderedMin = m * 6;
-      hr.style.setProperty('--hr', `${currentRenderedHr}deg`);
-      min.style.setProperty('--min', `${currentRenderedMin}deg`);
-    } else {
-      const p = easeOutCubic(elapsed / TRANSITION_DURATION);
-      currentRenderedHr = transitionStartHr + (transitionEndHr - transitionStartHr) * p;
-      currentRenderedMin = transitionStartMin + (transitionEndMin - transitionStartMin) * p;
-      hr.style.setProperty('--hr', `${currentRenderedHr}deg`);
-      min.style.setProperty('--min', `${currentRenderedMin}deg`);
-    }
-  } else {
-    const targetHr = h * 30, targetMin = m * 6;
-    if (Math.abs(targetMin - currentRenderedMin) > 0.04) {
-      currentRenderedMin = targetMin;
-      min.style.setProperty('--min', `${targetMin}deg`);
-    }
-    if (Math.abs(targetHr - currentRenderedHr) > 0.02) {
-      currentRenderedHr = targetHr;
-      hr.style.setProperty('--hr', `${targetHr}deg`);
-    }
-  }
-
-  const secFloor = Math.floor(nowMs / 1000);
-  if (secFloor !== lastLiveSecondTick) {
-    lastLiveSecondTick = secFloor;
-    updateHeaderLiveTime();
+  const secFloor = Math.floor(d.getTime() / 1000);
+  if (secFloor !== lastSec) {
+    lastSec = secFloor;
+    const f = formatTime(d);
+    headerLocTime.textContent = `${f.time} ${f.ampm}`;
     if (isModalOpen) updateLiveCardTimes();
   }
-
   requestAnimationFrame(updateClock);
 }
-
 requestAnimationFrame(updateClock);
